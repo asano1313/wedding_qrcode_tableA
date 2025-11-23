@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Wedding Seating Chart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italianno&family=Zen+Old+Mincho:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdfbf7;
+            --text-color: #4a4a4a;
+            --seat-color: #ffffff;
+            --seat-border: #e0e0e0;
+            --highlight-color: #595050;
+            /* Warm Charcoal */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Zen Old Mincho", serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            /* Fallback */
+            min-height: 100dvh;
+            /* Modern mobile browsers */
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            /* Pastel Grain Noise Background - Refined Iteration 3 (Simplified) */
+            background-color: #fdfbf7;
+            background-image:
+                radial-gradient(at 70% 20%, hsla(320, 100%, 92%, 1) 0px, transparent 40%),
+                /* Soft Pink - Random pos */
+                radial-gradient(at 10% 60%, hsla(35, 100%, 92%, 1) 0px, transparent 50%),
+                /* Cream/Peach - Random pos */
+                radial-gradient(at 40% 80%, hsla(330, 100%, 94%, 1) 0px, transparent 40%);
+            /* Very Light Rose - Random pos */
+            position: relative;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+
+        /* Noise Overlay - Refined Iteration 2 */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.35;
+            /* Adjusted baseFrequency for slightly coarser grain */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.0' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay;
+            /* Better blending with background */
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            justify-content: center;
+            gap: 15px;
+            /* Allow content to determine height naturally, centered vertically in viewport */
+            min-height: 0; 
+        }
+
+        /* Areas */
+        .area-label {
+            font-family: "Zen Old Mincho", serif;
+            color: #5a4d4d;
+            text-align: center;
+        }
+
+        .main-table-area {
+            align-self: center;
+            width: auto;
+            padding: 8px 30px;
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            border-top: 1px solid var(--highlight-color);
+            border-bottom: 1px solid var(--highlight-color);
+            background: transparent;
+        }
+
+        .middle-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            gap: 20px;
+        }
+
+        .entrance-area {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: #888;
+            border-right: 1px solid var(--highlight-color);
+            padding-right: 10px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .seating-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: clamp(8px, 2vw, 15px);
+            width: 100%;
+            max-width: 400px;
+            /* Space for entrance */
+        }
+
+        .seat {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #555;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
+            transition: transform 0.2s ease;
+        }
+
+        .seat:hover {
+            transform: scale(1.05);
+            background: #fff;
+        }
+
+        .garden-area {
+            align-self: center;
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            color: #888;
+            border-bottom: 1px solid var(--highlight-color);
+            padding-bottom: 5px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 400px) {
+            .seating-grid {
+                gap: 8px;
+            }
+
+            .seat {
+                font-size: 1rem;
+            }
+            
+            .entrance-area {
+                font-size: 0.9rem;
+                padding-right: 8px;
+                margin-right: -5px; /* Tweak spacing on small screens */
+            }
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            padding: 0;
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .welcome-message::after {
+            content: "";
+            display: block;
+            width: 40px;
+            height: 1px;
+            background: var(--highlight-color);
+            margin: 10px auto 0;
+        }
+
+        .welcome-message h1 {
+            font-family: "Italianno", cursive;
+            font-size: 4.5rem;
+            font-weight: normal;
+            color: #5a4d4d;
+            margin-bottom: 5px;
+            line-height: 1.1;
+        }
+
+        .welcome-message p {
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            color: #777;
+        }
+
+        .welcome-message strong {
+            font-size: 1.1rem;
+            color: var(--highlight-color);
+            font-weight: bold;
+            font-family: "Zen Old Mincho", serif;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Current Seat Animation - Filled Gradient & Ping Theme with Noise */
+        .seat.current-seat {
+            /* Layered background: Noise + Gradient */
+            background-image:
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.0' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
+                linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            background-blend-mode: overlay, normal;
+            /* Pastel Pink/Peach Gradient */
+            color: white;
+            border: none;
+            z-index: 1;
+            position: relative;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 154, 158, 0.4);
+            animation: gentle-pulse 2s infinite ease-in-out;
+        }
+
+        /* The Ping / Ripple Effect */
+        .seat.current-seat::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            /* Layered background: Noise + Gradient (Inherited logic manually applied) */
+            background-image:
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.0' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
+                linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            background-blend-mode: overlay, normal;
+            z-index: -1;
+            opacity: 0.6;
+            animation: ping-ripple 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        /* Remove the previous ::after element as we are using direct content now */
+        .seat.current-seat::after {
+            display: none;
+        }
+
+        @keyframes gentle-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes ping-ripple {
+
+            75%,
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-color);
+            width: 90%;
+            max-width: 800px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            /* Noise texture match */
+            background-image:
+                radial-gradient(at 70% 20%, hsla(320, 100%, 92%, 0.5) 0px, transparent 40%),
+                radial-gradient(at 10% 60%, hsla(35, 100%, 92%, 0.5) 0px, transparent 50%),
+                radial-gradient(at 40% 80%, hsla(330, 100%, 94%, 0.5) 0px, transparent 40%);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2.5rem;
+            color: #aa9999;
+            cursor: pointer;
+            line-height: 1;
+            z-index: 10;
+            font-weight: 200;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #595050;
+        }
+
+        .modal-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .members-column {
+            flex: 1;
+            min-width: 240px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .member-entry {
+            font-family: "Zen Old Mincho", serif;
+            line-height: 1.4;
+        }
+
+        .member-role {
+            font-size: 1rem;
+            color: #e68a9f; /* Soft pink matching image */
+            margin-bottom: 5px;
+            letter-spacing: 0.05em;
+        }
+
+        .member-name {
+            font-size: 1.5rem;
+            color: #e68a9f;
+            font-weight: bold;
+            letter-spacing: 0.15em;
+            white-space: nowrap;
+        }
+
+        .honorific {
+            font-size: 1.1rem;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+
+        .center-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .big-seat-icon {
+            width: 140px;
+            height: 140px;
+            background: #eaccd3; /* Pale pink circle background */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: #fff; /* White text */
+            font-weight: bold;
+            font-family: sans-serif;
+            box-shadow: 0 5px 20px rgba(234, 204, 211, 0.6);
+            user-select: none;
+        }
+
+        @media (max-width: 700px) {
+            .modal-content {
+                padding: 40px 20px 20px; /* Top padding increased for close button */
+                width: 95%;
+                max-height: 85vh; /* Increased safety margin */
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .close-modal {
+                top: 10px;
+                right: 10px;
+                padding: 10px; /* Increase touch target */
+                font-size: 2rem;
+            }
+
+            .modal-layout {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas:
+                    "icon icon"
+                    "left right";
+                gap: 15px;
+            }
+
+            .center-display {
+                grid-area: icon;
+                margin-bottom: 10px;
+            }
+            
+            .big-seat-icon {
+                width: 100px;
+                height: 100px;
+                font-size: 3.5rem;
+            }
+
+            /* Left Column */
+            .members-column:nth-child(1) {
+                grid-area: left;
+                text-align: center;
+                align-items: center;
+                min-width: auto;
+                gap: 20px;
+            }
+
+            /* Right Column */
+            .members-column:nth-child(3) {
+                grid-area: right;
+                text-align: center;
+                align-items: center;
+                min-width: auto;
+                gap: 20px;
+            }
+            
+            .member-role {
+                font-size: 0.85rem;
+            }
+            
+            .member-name {
+                font-size: 1.2rem;
+            }
+            
+            .honorific {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Welcome Message -->
+        <div class="welcome-message">
+            <h1>Welcome!</h1>
+            <p>Your table is <strong>Table A</strong></p>
+        </div>
+
+        <!-- Top: Main Table -->
+        <div class="area-label main-table-area">Main Table</div>
+
+        <!-- Middle: Entrance (Left) + Seats -->
+        <div class="middle-section">
+            <div class="area-label entrance-area">Entrance</div>
+
+            <div class="seating-grid">
+                <!-- 4 columns x 3 rows = 12 seats (A-L) -->
+                <!-- Row 1 -->
+                <div class="seat current-seat" data-seat-letter="A">A</div>
+                <div class="seat">B</div>
+                <div class="seat">C</div>
+                <div class="seat">D</div>
+                <!-- Row 2 -->
+                <div class="seat">E</div>
+                <div class="seat">F</div>
+                <div class="seat">G</div>
+                <div class="seat">H</div>
+                <!-- Row 3 -->
+                <div class="seat">I</div>
+                <div class="seat">J</div>
+                <div class="seat">K</div>
+                <div class="seat">L</div>
+            </div>
+        </div>
+
+        <!-- Bottom: Garden -->
+        <div class="area-label garden-area">Garden</div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="seat-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" aria-label="Close modal">&times;</button>
+            <div class="modal-layout">
+                <!-- Left Column -->
+                <div class="members-column">
+                    <div class="member-entry">
+                        <div class="member-role">新郎友人</div>
+                        <div class="member-name">野原 篤史 <span class="honorific">様</span></div>
+                    </div>
+                    <div class="member-entry">
+                        <div class="member-role">新郎友人</div>
+                        <div class="member-name">西脇 哲平 <span class="honorific">様</span></div>
+                    </div>
+                    <div class="member-entry">
+                        <div class="member-role">新郎友人</div>
+                        <div class="member-name">関根 慎弥 <span class="honorific">様</span></div>
+                    </div>
+                </div>
+
+                <!-- Center Icon -->
+                <div class="center-display">
+                    <div class="big-seat-icon">A</div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="members-column">
+                    <div class="member-entry">
+                        <div class="member-role">新郎友人</div>
+                        <div class="member-name">佐藤 正明 <span class="honorific">様</span></div>
+                    </div>
+                    <div class="member-entry">
+                        <div class="member-role">新郎友人</div>
+                        <div class="member-name">山根 誉己 <span class="honorific">様</span></div>
+                    </div>
+                    <div class="member-entry">
+                        <div class="member-role">新郎友人</div>
+                        <div class="member-name">大矢 直哉 <span class="honorific">様</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('seat-modal');
+            const closeBtn = document.querySelector('.close-modal');
+            const seatA = document.querySelector('.seat[data-seat-letter="A"]');
+
+            function openModal() {
+                modal.classList.add('active');
+                // Prevent background scrolling
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (seatA) {
+                seatA.addEventListener('click', openModal);
+                seatA.style.cursor = 'pointer';
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeModal);
+            }
+
+            // Close on background click
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
