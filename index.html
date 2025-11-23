@@ -91,13 +91,11 @@
 
         .main-table-area {
             align-self: center;
-            width: auto;
-            padding: 8px 30px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             letter-spacing: 0.2em;
-            border-top: 1px solid var(--highlight-color);
+            color: #888;
             border-bottom: 1px solid var(--highlight-color);
-            background: transparent;
+            padding-bottom: 5px;
         }
 
         .middle-section {
@@ -109,20 +107,6 @@
             gap: 20px;
         }
 
-        .entrance-area {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-size: 1rem;
-            letter-spacing: 0.3em;
-            color: #888;
-            border-right: 1px solid var(--highlight-color);
-            padding-right: 10px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
 
         .seating-grid {
             display: grid;
@@ -173,50 +157,79 @@
                 font-size: 1rem;
             }
             
-            .entrance-area {
-                font-size: 0.9rem;
-                padding-right: 8px;
-                margin-right: -5px; /* Tweak spacing on small screens */
-            }
         }
 
-        /* Welcome Message */
+        /* Welcome Message - Layered Typography (Big Initial) */
         .welcome-message {
             text-align: center;
             padding: 0;
+            margin: 0 auto 30px;
             position: relative;
-            margin-bottom: 25px;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            /* Remove previous styles */
+            width: auto;
+            border-radius: 0;
+            border: none;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: none;
         }
 
-        .welcome-message::after {
-            content: "";
-            display: block;
-            width: 40px;
-            height: 1px;
-            background: var(--highlight-color);
-            margin: 10px auto 0;
-        }
-
-        .welcome-message h1 {
+        .main-title {
             font-family: "Italianno", cursive;
-            font-size: 4.5rem;
-            font-weight: normal;
-            color: #5a4d4d;
-            margin-bottom: 5px;
-            line-height: 1.1;
+            font-size: 5rem;
+            color: #595050;
+            line-height: 1;
+            margin-bottom: 0;
+            z-index: 1;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+            margin-top: 0;
+            transform: translateY(-30px);
         }
 
-        .welcome-message p {
-            font-size: 0.95rem;
-            letter-spacing: 0.05em;
-            color: #777;
-        }
-
-        .welcome-message strong {
-            font-size: 1.1rem;
-            color: var(--highlight-color);
-            font-weight: bold;
+        /* The Big "A" in background */
+        .welcome-message::before {
+            content: "A";
             font-family: "Zen Old Mincho", serif;
+            font-size: 12rem;
+            line-height: 1;
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(230, 138, 159, 0.15); /* Soft pink, very subtle */
+            z-index: 0;
+            font-weight: 700;
+            pointer-events: none;
+        }
+        
+        /* Remove the dots from previous design */
+        .welcome-message::after {
+            display: none;
+        }
+
+        .welcome-label {
+            font-family: "Zen Old Mincho", serif;
+            font-size: 1.0rem;
+            letter-spacing: 0.3em;
+            color: #595050;
+            position: relative;
+            z-index: 1;
+            white-space: nowrap;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(253, 251, 247, 0.8);
+            margin-top: 5px;
+        }
+
+        .welcome-table-name {
+            display: none;
         }
 
         @keyframes fadeInDown {
@@ -488,8 +501,9 @@
     <div class="container">
         <!-- Welcome Message -->
         <div class="welcome-message">
-            <h1>Welcome!</h1>
-            <p>Your table is <strong>Table A</strong></p>
+            <div class="main-title">Welcome</div>
+            <span class="welcome-label">Your Table</span>
+            <div class="welcome-table-name">Table A</div>
         </div>
 
         <!-- Top: Main Table -->
@@ -497,8 +511,6 @@
 
         <!-- Middle: Entrance (Left) + Seats -->
         <div class="middle-section">
-            <div class="area-label entrance-area">Entrance</div>
-
             <div class="seating-grid">
                 <!-- 4 columns x 3 rows = 12 seats (A-L) -->
                 <!-- Row 1 -->
